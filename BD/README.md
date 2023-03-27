@@ -1,2 +1,2 @@
-# A01026174_TC2005B
-Assignments for the course about Data Bases
+# Databases
+Assignments for the Database module of course TC2005B
