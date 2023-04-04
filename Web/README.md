@@ -1,2 +1,2 @@
 # Web
-Assignments for the Web module of course TC2005B
+Assignments for Web development for the course TC2005B
