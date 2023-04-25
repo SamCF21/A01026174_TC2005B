@@ -30,8 +30,34 @@ SELECT first_name, last_name FROM sakila.actor WHERE first_name < 'B'; -- nombre
 SELECT first_name, last_name FROM sakila.actor WHERE first_name < 'B' AND last_name <'B'; -- misma letra en nombre y apellido
 -- regex: permite detectar patrones específicos en una cadena de texto
 -- todas las peliculas que tienen la palabra familia en el título
-SELECT title FROM sakila.film WHERE title LIKE '%family%'; -- algo con prefijos, se usan regex
+SELECT title FROM sakila.film WHERE title LIKE '%family%'; -- todos los tutilos que tengan la palabra familia
+-- algo con prefijos, se usan regex
 -- = numeros / like cadenas
 -- video home --> son peliculas de bajo presupuesto que no llegan al cine
-SELECT title, actors FROM sakila.film_list WHERE actors LIKE 'NAT_%'; -- peliculas con actores que sus nombres empiezan en NAT
-SELECT title FROM film_list WHERE category LIKE 'Sci-Fi' AND rating LIKE 'PG'; -- peliculas de science fiction reated PG 
+-- usar desambiguador en la tabla si se quiere ver mejor y ayudar
+SELECT title, actors FROM sakila.film_list WHERE actors LIKE 'NAT_%'; -- peliculas con primer actor que sus nombres empiezan en NAT
+SELECT title, actors FROM sakila.film_list WHERE actors LIKE '%_AMS'; -- sufijo
+SELECT title, actors FROM sakila.film_list WHERE actors LIKE '%_williams_%'; -- infijo
+SELECT title FROM sakila.film_list WHERE category LIKE 'Sci-Fi' AND rating LIKE 'PG'; -- peliculas de science fiction reated PG 
+SELECT title FROM sakila.film_list WHERE category LIKE 'Children' OR category LIKE 'Family'; -- titulos para ver en familia
+DESC sakila.language;
+
+SELECT language_id, name FROM sakila.language WHERE NOT (language_id = 2); -- no sean del lenguaje 2
+
+SELECT name FROM sakila.customer_list ORDER BY name ASC LIMIT 10;  -- de menor a mayor, los clientes hasta el 10
+SELECT name FROM sakila.customer_list ORDER BY name DESC LIMIT 10; -- descendinte
+
+SELECT address FROM sakila.address ORDER BY last_update DESC LIMIT 5; -- dirección de las ultimas personas
+SELECT address, district FROM sakila.address ORDER BY district, address;  -- ordena por distrito y despues por dirección
+SELECT address FROM sakila.address ORDER BY district, address;
+SELECT address, district FROM sakila.address ORDER BY district ASC, address DESC LIMIT 10; -- distict es para que no se repitan las cosas / o elementos distintas
+SELECT name FROM customer_list LIMIT 5, 5; 
+SELECT id, name FROM sakila.customer_list ORDER BY id LIMIT 10 OFFSET 5; -- offset empieza desde cierto punto
+SELECT id, name FROM sakila.customer_list ORDER BY id LIMIT 5, 10;
+-- INSERT agrega elementos
+INSERT INTO sakila.language VALUES (NULL, 'Portuguese', NOW()); -- null por auto increment
+SELECT * FROM sakila.language;
+
+SELECT MAX(language_id) FROM language; -- 
+INSERT INTO sakila.language VALUES (8, 'Portuguese', '2020-09-26 10:35:00');
+SELECT * FROM sakila.language;
