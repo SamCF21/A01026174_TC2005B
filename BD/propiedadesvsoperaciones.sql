@@ -54,10 +54,70 @@ SELECT address, district FROM sakila.address ORDER BY district ASC, address DESC
 SELECT name FROM customer_list LIMIT 5, 5; 
 SELECT id, name FROM sakila.customer_list ORDER BY id LIMIT 10 OFFSET 5; -- offset empieza desde cierto punto
 SELECT id, name FROM sakila.customer_list ORDER BY id LIMIT 5, 10;
+SELECT DISTINCT first_name FROM sakila.actor ORDER BY first_name DESC LIMIT 10;
+
+
 -- INSERT agrega elementos
-INSERT INTO sakila.language VALUES (NULL, 'Portuguese', NOW()); -- null por auto increment
+DESC sakila.language; -- te enseña el orden
+INSERT INTO sakila.language VALUES (NULL, 'Portuguese', NOW()); -- null por auto increment entonces lo llena solo/opcion de que pongas el dato o que el lo ponga por ti
+-- reservas el espacio que quieres/si no te acuerdas del orden, puede generae errores
 SELECT * FROM sakila.language;
 
 SELECT MAX(language_id) FROM language; -- 
-INSERT INTO sakila.language VALUES (8, 'Portuguese', '2020-09-26 10:35:00');
+INSERT INTO sakila.language VALUES (11, 'Russian', '2022-09-26 10:35:00');
 SELECT * FROM sakila.language;
+
+INSERT INTO sakila.language VALUES (NULL, 'Spanish', NOW()),(NULL, 'Hebrew', NOW()); -- más eficiente se hace un solo commit por las transacciones en memoria solo una vez
+-- web para que no se sature el ancho de banda 
+INSERT INTO sakila.language VALUES (NULL, 'Spanish', NOW());
+INSERT INTO sakila.language VALUES (NULL, 'Hebrew', NOW());
+SELECT * FROM sakila.language;
+
+-- forma 1
+ -- otra forma/como ya tiene ese auto complete, no necesitas la llave primaria null
+INSERT INTO sakila.language (name, last_update) VALUES ('Hungarian', NOW()); -- 2 da más efectiva porque ya sabes el orden
+SELECT * FROM sakila.language;
+
+-- forma 2
+-- cambiar el orden, puedes darle los valores en el orden que te acuerdes
+INSERT INTO sakila.language (last_update, name) VALUES ('Hungarian', NOW()); 
+
+-- forma 3 // inserciones individuales
+-- otra forma
+INSERT INTO sakila.language SET name='German', last_update=NOW();
+
+-- otra inserción
+-- varias ciudades al mismo pais
+DESC sakila.country;
+SELECT country FROM sakila.country WHERE country_id=19;
+INSERT INTO sakila.city (city, country_id) VALUES ('Sao Carlos, 19'), ('Araquara', 19), ('Riberiao Preto', 19);
+
+-- otra forma
+INSERT INTO sakila.country SET country_id=NULL, country='Bahamas',
+last_update=NOW();
+
+-- otras cosas del select
+-- cuando ay muchas id's son foreign keys
+
+DESC sakila.payment;
+SELECT DISTINCT amount FROM sakila.payment; -- elementos diferentes distinto/ distintas cantidades en las que te han pagado
+SELECT MAX(amount) FROM sakila.payment; -- MAXIA CANTIDA QUE TE HAN PAGADO, FUNCION AGLOMERATIVA
+SELECT MAX(amount) as "VIP", MIN(amount) as "Tranza", AVG(amount) as "Cualquier persona" FROM sakila.payment;
+
+DESC sakila.city;
+DESC sakila.country;
+
+SELECT a.city, b.country FROM sakila.city as a INNER JOIN sakila.country as b  ON a.country_id = b.country_id GROUP BY (a.city_id);
+-- agrupa la info 
+-- TIPOS DE COSAS EN BASES DE DATOS: SELECCION  CONCATENACION PROJECCION UNION DIVISION DIFERENCIA
+
+-- DELETE
+USE sakila;
+SET SQL_SAFE_UPDATES = 0; -- Eliminar filas sin formato seguro
+SELECT * FROM sakila.rental;
+DELETE FROM sakila.rental; -- Eliminar todas las filas de una tabla
+SELECT * FROM sakila.rental;
+-- DROP SCHEMA SAKILA;
+-- Drop elimina la estructura de datos / toda la tabla
+-- DELETE ELIMINA DATOS y deja tabla vacia
+
