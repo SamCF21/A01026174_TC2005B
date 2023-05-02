@@ -115,9 +115,27 @@ SELECT a.city, b.country FROM sakila.city as a INNER JOIN sakila.country as b  O
 USE sakila;
 SET SQL_SAFE_UPDATES = 0; -- Eliminar filas sin formato seguro
 SELECT * FROM sakila.rental;
-DELETE FROM sakila.rental; -- Eliminar todas las filas de una tabla
+DELETE FROM sakila.rental WHERE rental_id < 10; -- Eliminar todas las filas de una tabla
 SELECT * FROM sakila.rental;
+
+SELECT * FROM sakila.payment;
+DELETE FROM sakila.payment ORDER BY customer_id LIMIT 10000; -- elimina todas las filas hasta la 10000
+
+-- para eliminar muchos registros
+TRUNCATE TABLE sakila.paymrnt; -- elimina todo el contenido pero no la estructura / es más rápida
 -- DROP SCHEMA SAKILA;
 -- Drop elimina la estructura de datos / toda la tabla
 -- DELETE ELIMINA DATOS y deja tabla vacia
 
+UPDATE sakila.payment SET amount = amount*1.1; -- comparación, inserción multiplicar cada una de las filas de la columna amount
+UPDATE sakila.payment SET amount = amount*1.1 WHERE payment_id < 30; -- camia las filas donde su payment id sea menor de 30
+
+UPDATE sakila.actor SET last_name = UPPER('cruz') WHERE first_name LIKE 'PENELOPE' AND last_name LIKE 'GUINESS'; -- cambia el apellido de la actriz penelope guiness a penelope cruz
+UPDATE sakila.payment SET last_update= NOW() LIMIT 10; -- cambia la hora para las primeras 10 filas a la hora actual ejecutada
+
+-- concatenacion en db
+
+-- join
+-- INNER JOIN agarra dos tablas que tengan columnas en comun para poderlas unir
+
+SELECT city, country FROM sakila.city INNER JOIN sakila.country USING (country_id) WHERE country.country_id < 5 ORDER BY country, city; -- ciudad y país que las dos estan en tablas distintas la columna country_id está en ambas tablas/cuidades de los primeros 5 paises
